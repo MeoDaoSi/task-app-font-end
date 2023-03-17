@@ -2,48 +2,104 @@ import { Box, Button, TextField } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import LoadingButton from '@mui/lab/LoadingButton';
+import axios from 'axios';
+import axiosClient from '../apis/axiosClient';
+import authApi from '../apis/authApi';
 
 const Signup = () => {
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(false);
-    const [usernameErrText, setUsernameErrText] = useState('');
+    const [nameErrText, setNameErrText] = useState('');
+    const [emailErrText, setEmailErrText] = useState('');
     const [passwordErrText, setPasswordErrText] = useState('');
-    const [confirmPasswordErrText, setConfirmPasswordErrText] = useState('');
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setUsernameErrText('')
+        setNameErrText('')
+        setEmailErrText('')
         setPasswordErrText('')
-        setConfirmPasswordErrText('')
 
         const data = new FormData(e.target);
-        const username = data.get('username').trim();
+        const name = data.get('name').trim();
+        const email = data.get('email').trim();
         const password = data.get('password').trim();
-        const confirmPassword = data.get('confirmPassword').trim();
 
         let err = false
 
-        if (username === '') {
+        if (name === '') {
             err = true
-            setUsernameErrText('Vui long nhap')
+            setNameErrText('Vui long nhap')
+        }
+        if (email === '') {
+            err = true
+            setEmailErrText('Vui long nhap')
         }
         if (password === '') {
             err = true
             setPasswordErrText('Vui long nhap')
-        }
-        if (confirmPassword === '') {
-            err = true
-            setConfirmPasswordErrText('Vui long nhap')
-        } 
-        if (password!== confirmPassword) {
-            err = true
-            setConfirmPasswordErrText('Mật khẩu không khớp')
         }
         if (err) {
             return;
         }
         setLoading(true);
         
+        // try {
+            // const res = await authApi.signup({
+                
+            // })
+            // axiosClient.post('/users', { 
+            //     name,email,password
+            // })
+            //     .then(res => {
+            //         if(res.errors){
+            //             console.log('errror roi!');
+            //         }else{
+            //             console.log(res);
+            //         }
+            //     })
+            //     .catch((error)=>{
+            //         console.log(error);
+            //     })
+            try {
+                const response = await authApi.signup({ 
+                    name,email,password
+                })
+                // console.log(response.data);
+                setLoading(false);
+                navigate('/');  
+            } catch (error) {
+                // console.log(error);
+                const errorMessage = error.response.data.errors;
+                console.log(error.response.data.errors);
+                console.log(error.response.data.errors.email);
+                if(errorMessage.name){
+                    setNameErrText(errorMessage.name.message)
+                }
+                if(errorMessage.email){
+                    console.log('123');
+                    setEmailErrText(errorMessage.email.message)
+                }
+                if(errorMessage.password){
+                    setPasswordErrText(errorMessage.password.message)
+                }
+                setLoading(false);
+            }
+            // localStorage.setItem('token')
+        // } catch (error) {
+            // const errors = error.data.errors
+            // errors.forEach(err => {
+            //     if(err.param === 'name'){
+            //         setNameErrText(err.msg)
+            //     }
+            //     if(err.param === 'email'){
+            //         setEmailErrText(err.msg)
+            //     }
+            //     if(err.param === 'password'){
+            //         setPasswordErrText(err.msg)
+            //     }
+            // })
+            // setLoading(false);
+        // }
     }
 
     return (
@@ -58,12 +114,24 @@ const Signup = () => {
                     margin='normal'
                     required
                     fullWidth
-                    id='username'
-                    label='Username'
-                    name='username'
+                    id='name'
+                    label='Full Name'
+                    name='name'
                     disabled={loading}
-                    error={usernameErrText !== '' }
-                    helperText={usernameErrText}
+                    error={nameErrText !== '' }
+                    helperText={nameErrText}
+                />
+                <TextField
+                    margin='normal'
+                    required
+                    fullWidth
+                    id='email'
+                    label='Email Address'
+                    name='email'
+                    type='email'
+                    disabled={loading}
+                    error={emailErrText !== '' }
+                    helperText={emailErrText}
                 />
                 <TextField
                     margin='normal'
@@ -76,18 +144,6 @@ const Signup = () => {
                     disabled={loading}
                     error={passwordErrText !== '' }
                     helperText={passwordErrText}
-                />
-                <TextField
-                    margin='normal'
-                    required
-                    fullWidth
-                    id='confirmPassword'
-                    label='Confirm Password'
-                    name='confirmPassword'
-                    type='password'
-                    disabled={loading}
-                    error={confirmPasswordErrText !== '' }
-                    helperText={confirmPasswordErrText}
                 />
                 <LoadingButton
                     sx={{mt:3, mb:2}}
