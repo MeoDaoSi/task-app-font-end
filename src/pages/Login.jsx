@@ -35,51 +35,17 @@ const Login = () => {
             return;
         }
         setLoading(true);
-        
-        // try {
-            // const res = await authApi.signup({
-                
-            // })
-            // axiosClient.post('/users', { 
-            //     name,email,password
-            // })
-            //     .then(res => {
-            //         if(res.errors){
-            //             console.log('errror roi!');
-            //         }else{
-            //             console.log(res);
-            //         }
-            //     })
-            //     .catch((error)=>{
-            //         console.log(error);
-            //     })
-            try {
-                const response = await authApi.login({ 
-                    email,password
-                })
-                // console.log(response.data);
-                setLoading(false);
-                navigate('/');  
-            } catch (error) {
-                alert('tai khoan hoac mat khau khong dung')
-                setLoading(false);
-            }
-            // localStorage.setItem('token')
-        // } catch (error) {
-            // const errors = error.data.errors
-            // errors.forEach(err => {
-            //     if(err.param === 'name'){
-            //         setNameErrText(err.msg)
-            //     }
-            //     if(err.param === 'email'){
-            //         setEmailErrText(err.msg)
-            //     }
-            //     if(err.param === 'password'){
-            //         setPasswordErrText(err.msg)
-            //     }
-            // })
-            // setLoading(false);
-        // }
+        try {
+            const response = await authApi.login({ 
+                email,password
+            })
+            setLoading(false);
+            localStorage.setItem('token', response.data.token);
+            navigate('/');  
+        } catch (error) {
+            alert('tai khoan hoac mat khau khong dung')
+            setLoading(false);
+        }
     }
 
     return (

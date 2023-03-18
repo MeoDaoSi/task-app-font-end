@@ -42,64 +42,26 @@ const Signup = () => {
             return;
         }
         setLoading(true);
-        
-        // try {
-            // const res = await authApi.signup({
-                
-            // })
-            // axiosClient.post('/users', { 
-            //     name,email,password
-            // })
-            //     .then(res => {
-            //         if(res.errors){
-            //             console.log('errror roi!');
-            //         }else{
-            //             console.log(res);
-            //         }
-            //     })
-            //     .catch((error)=>{
-            //         console.log(error);
-            //     })
-            try {
-                const response = await authApi.signup({ 
-                    name,email,password
-                })
-                // console.log(response.data);
-                setLoading(false);
-                navigate('/');  
-            } catch (error) {
-                // console.log(error);
-                const errorMessage = error.response.data.errors;
-                console.log(error.response.data.errors);
-                console.log(error.response.data.errors.email);
-                if(errorMessage.name){
-                    setNameErrText(errorMessage.name.message)
-                }
-                if(errorMessage.email){
-                    console.log('123');
-                    setEmailErrText(errorMessage.email.message)
-                }
-                if(errorMessage.password){
-                    setPasswordErrText(errorMessage.password.message)
-                }
-                setLoading(false);
+        try {
+            const response = await authApi.signup({ 
+                name,email,password
+            })
+            localStorage.setItem('token', response.data.token);
+            setLoading(false);
+            navigate('/');  
+        } catch (error) {
+            const errorMessage = error?.response?.data?.errors;
+            if(errorMessage?.name){
+                setNameErrText(errorMessage?.name?.message)
             }
-            // localStorage.setItem('token')
-        // } catch (error) {
-            // const errors = error.data.errors
-            // errors.forEach(err => {
-            //     if(err.param === 'name'){
-            //         setNameErrText(err.msg)
-            //     }
-            //     if(err.param === 'email'){
-            //         setEmailErrText(err.msg)
-            //     }
-            //     if(err.param === 'password'){
-            //         setPasswordErrText(err.msg)
-            //     }
-            // })
-            // setLoading(false);
-        // }
+            if(errorMessage?.email || error.response.data?.code){
+                setEmailErrText(errorMessage?.email?.message || 'Email da ton tai!');
+            }
+            if(errorMessage?.password){
+                setPasswordErrText(errorMessage?.password?.message)
+            }
+            setLoading(false);
+        }
     }
 
     return (

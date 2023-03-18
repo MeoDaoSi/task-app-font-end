@@ -1,27 +1,22 @@
 import axios from 'axios';
 import queryString from 'query-string';
 
-// const baseURL = 'http:/127.0.0.1:5000/api/v1'
-// const getToken = () => localStorage.getItem('token');     
+const baseURL = 'http://localhost:80'
+const getToken = () => localStorage.getItem('token');     
 
 const axiosClient = axios.create({
-    baseURL: 'http://localhost:80',
+    baseURL
     // paramsSerializer: params => queryString({params})
 })
 
 axiosClient.interceptors.request.use( async config => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    return {
+        ...config,
+        headers:{
+            'Content-Type': 'application/json',
+            'authorization': `Bearer ${getToken()}`
+        }
     }
-    // return {
-    //     ...config,
-    //     headers:{
-    //         'Content-Type': 'application/json',
-    //         'authorization': `Bearer ${getToken()}`
-    //     }
-    // }
-    return config
 })
 
 // axiosClient.interceptors.response.use( response => {
