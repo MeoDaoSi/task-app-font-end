@@ -1,15 +1,42 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Box, Drawer, List, ListItemButton, IconButton, Typography, ListItem } from '@mui/material';
 import assets from '../../assets/index';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import taskApi from '../../apis/taskApi';
+import { useEffect } from 'react';
+import { setTasks } from '../../redux/features/taskSlice';
 
 const Sidebar = () => {
     const user = useSelector((state) => state.user.value)
+    const tasks = useSelector((state) => state.task.value);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { taskId } = useParams;
     const sidebarWidth = 250;
+
+    useEffect(() => {
+        const getTasks = async () => {
+            try {
+                const res = await taskApi.getAll();
+                console.log(res);
+                // dispatch(setTasks(res));
+                if (res.length > 0 && taskId === undefined ) {
+                    // navigate(`boards/${res[0]._id}`)
+                }
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+        getTasks();
+    }, [])
     
+    useEffect(() => {
+        console.log(tasks);
+    }, [tasks])
+    
+
     const logout = () => {
         localStorage.removeItem('token');
         navigate('/login');
@@ -78,7 +105,7 @@ const Sidebar = () => {
                         </IconButton>
                     </Box>
                 </ListItem>
-                <Box sx={{ paddingTop: '10px'}}/>
+                
             </List>
         </Drawer>
     )
