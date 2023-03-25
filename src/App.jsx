@@ -11,6 +11,7 @@ import Home from './pages/Home.jsx';
 import Board from './pages/Board';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
+import Index from './pages/Index';
 
 function App() {
     const theme = createTheme({
@@ -21,6 +22,9 @@ function App() {
                 <CssBaseLine/>
                 <BrowserRouter>
                     <Routes>
+                        <Route path='/'>
+                            <Route index element={<Index/>}/>
+                        </Route>
                         <Route path='/' element={<AuthLayout/>}>
                             <Route path='login' element={<Login/>}/>
                             <Route path='signup' element={<Signup/>}/>
