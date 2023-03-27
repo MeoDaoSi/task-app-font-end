@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useDispatch } from "react-redux";
-import { setTasks } from "../redux/features/taskSlice";
+import { setBoards } from "../redux/features/boardSlice";
 import { useNavigate } from "react-router-dom";
-import taskApi from "../apis/taskApi";
+import boardApi from "../apis/boardApi";
 import { useState } from "react";
 
 
@@ -12,13 +12,13 @@ const Home = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
 
-    const createTask = async () => {
+    const createBoard = async () => {
         setLoading(true);
         try {
-            const res = taskApi.create();
+            const res = await boardApi.create();
             console.log(res);
-            // dispatch(setTasks([res]));
-            navigate(`/boards/${res._id}`);
+            dispatch(setBoards([res.data]));
+            navigate(`/boards/${res.data._id}`);
         } catch (error) {
             alert(error.message);
         }finally{
@@ -37,7 +37,7 @@ const Home = () => {
             <LoadingButton
                 variant='outlined'
                 color='success'
-                onClick={createTask}
+                onClick={createBoard}
                 loading={loading}
             >
                 Click here to create your first board

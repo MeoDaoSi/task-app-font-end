@@ -22,9 +22,9 @@ function App() {
                 <CssBaseLine/>
                 <BrowserRouter>
                     <Routes>
-                        <Route path='/'>
+                        {/* <Route path='/'>
                             <Route index element={<Index/>}/>
-                        </Route>
+                        </Route> */}
                         <Route path='/' element={<AuthLayout/>}>
                             <Route path='login' element={<Login/>}/>
                             <Route path='signup' element={<Signup/>}/>
