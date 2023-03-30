@@ -44,8 +44,32 @@ const Sidebar = () => {
         navigate('/login');
     }
 
-    const onDragEnd = () => {
+    const onDragEnd = async ({source, destination}) => {
+        console.log(boards);
+        const newList = [...boards];
+        const [removed] = newList.splice(source.index, 1);
+        newList.splice(destination?.index,0,removed);
 
+        const activeItem = newList.findIndex(e => e._id === boardId)
+        setActiveIndex(activeItem);
+        dispatch(setBoards(newList));
+        console.log(newList);
+        try {
+            await boardApi.updatePosition({ boards: newList })
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+    const addBoard = async () => {
+        try {
+            const res = await boardApi.create();
+            console.log(res);
+            const newList = [res.data, ...boards];
+            dispatch(setBoards(newList));
+            navigate(`/boards/${res.data._id}`)
+        } catch (error) {
+            alert(error.message);
+        }
     }
 
     return (
@@ -106,7 +130,7 @@ const Sidebar = () => {
                         <Typography variant='body2' fontWeight='700'>
                             Private
                         </Typography>
-                        <IconButton >
+                        <IconButton onClick={addBoard}>
                             <AddBoxOutlinedIcon fontSize='small' />
                         </IconButton>
                     </Box>
@@ -133,13 +157,14 @@ const Sidebar = () => {
                                                     <Typography variant='body2' fontWeight='700'
                                                     sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
                                                     >
-                                                        {item.title}
+                                                        {item.title !== "" ? item.title : "undefine" }
                                                     </Typography>
                                                 </ListItemButton>
                                             )}
                                         </Draggable>
                                     )})
                                 }
+                                {provided.placeholder}
                             </div>
                         )}
                     </Droppable>
