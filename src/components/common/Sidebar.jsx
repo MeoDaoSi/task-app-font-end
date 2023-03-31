@@ -8,6 +8,7 @@ import boardApi from '../../apis/boardApi';
 import { useEffect, useState } from 'react';
 import { setBoards } from '../../redux/features/boardSlice';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import FavoriteList from './FavoriteList';
 
 const Sidebar = () => {
     const user = useSelector((state) => state.user.value)
@@ -45,7 +46,7 @@ const Sidebar = () => {
     }
 
     const onDragEnd = async ({source, destination}) => {
-        console.log(boards);
+        // console.log(boards);
         const newList = [...boards];
         const [removed] = newList.splice(source.index, 1);
         newList.splice(destination?.index,0,removed);
@@ -107,18 +108,7 @@ const Sidebar = () => {
                     </Box>
                 </ListItem>
                 <Box sx={{ paddingTop: '10px'}}/>
-                <ListItem>
-                    <Box sx={{
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                    }}>
-                        <Typography variant='body2' fontWeight='700'>
-                            Favorite
-                        </Typography>
-                    </Box>
-                </ListItem>
+                <FavoriteList/>
                 <Box sx={{ paddingTop: '10px'}}/>
                 <ListItem>
                     <Box sx={{
@@ -157,7 +147,7 @@ const Sidebar = () => {
                                                     <Typography variant='body2' fontWeight='700'
                                                     sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
                                                     >
-                                                        {item.title !== "" ? item.title : "undefine" }
+                                                        {item.title !== "" ? item.title : "Untitled" }
                                                     </Typography>
                                                 </ListItemButton>
                                             )}

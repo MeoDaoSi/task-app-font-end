@@ -7,7 +7,7 @@ import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined'
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined'
 import { Box, IconButton, TextField } from '@mui/material'
 import { setBoards } from '../redux/features/boardSlice'
-// import { setFavouriteList } from '../redux/features/favouriteSlice'
+import { setFavoriteList } from '../redux/features/favoriteSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
 let timer;
@@ -20,21 +20,20 @@ const Board = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [sessions, setSessions] = useState([]);
-    const [isFavourite, setIsFavourite] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(false);
     const [icon, setIcon] = useState('');
 
     const boards = useSelector((state) => state.board.value)
+    const favoriteList = useSelector((state) => state.favorites.value )
 
     useEffect(() => {
         const getBoard = async () => {
             try {
                 const res = await boardApi.getOne(boardId);
-                console.log(res);
                 setTitle(res.data.title);
                 setDescription(res.data.description);
                 setSessions(res.data.sessions);
-                setIsFavourite(res.data.isFavourite);
-                setIcon(res.data.icon);
+                setIsFavorite(res.data.favorite);
             } catch (error) {
                 alert(error.message);
             }
@@ -50,6 +49,13 @@ const Board = () => {
         let temp = [...boards];
         const index = temp.findIndex(e => e._id === boardId);
         temp[index] = { ...temp[index], title: newTitle };
+
+        if (isFavorite) {
+            let tempFavorite = [...favoriteList]
+            const FavoriteIndex = tempFavorite.findIndex(e => e._id === boardId)
+            tempFavorite[FavoriteIndex] = { ...tempFavorite[FavoriteIndex], title: newTitle }
+            dispatch(setFavoriteList(tempFavorite))
+        }
         
         dispatch(setBoards(temp));
 
@@ -74,6 +80,42 @@ const Board = () => {
             }
         }, timeout);
     }
+
+    const addFavorite = async () => {
+        try {
+            const board = await boardApi.update( boardId, { favorite: isFavorite ? false : true })
+            let newFavoriteList = [...favoriteList];
+            if (isFavorite) {
+                newFavoriteList = newFavoriteList.filter(e => e._id !== boardId)
+            } else {
+                newFavoriteList.unshift(board.data)
+            }
+            dispatch(setFavoriteList(newFavoriteList))
+            setIsFavorite(!isFavorite)
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
+    const deleteBoard = async () => {
+        try {
+            await boardApi.delete(boardId)
+            if (isFavorite) {
+                const newFavoriteList = favoriteList.filter(e => e._id !== boardId)
+                dispatch(setFavoriteList(newFavoriteList))
+            }
+        
+            const newList = boards.filter(e => e._id !== boardId)
+            if( newList.length === 0 ) {
+                navigate('/boards')
+            }else {
+                navigate(`/boards/${newList[0]._id}`)
+            }
+            dispatch(setBoards(newList))
+        }catch (err) {
+            alert(err)
+        }
+    }
     
     return (
         <>
@@ -83,16 +125,16 @@ const Board = () => {
                 justifyContent: 'space-between',
                 width: '100%'
             }}>
-                <IconButton variant='outlined'>
+                <IconButton variant='outlined' onClick={addFavorite}>
                     {
-                        isFavourite ? (
+                        isFavorite ? (
                             <StarOutlinedIcon color='warning'/>
                         ) : (
                             <StarBorderOutlinedIcon/>
                         )
                     }
                 </IconButton>
-                <IconButton variant='outlined' color='error'>
+                <IconButton variant='outlined' color='error' onClick={deleteBoard}>
                     <DeleteOutlinedIcon/>
                 </IconButton>
             </Box>
