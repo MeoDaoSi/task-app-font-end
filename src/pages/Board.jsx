@@ -9,6 +9,7 @@ import { Box, IconButton, TextField } from '@mui/material'
 import { setBoards } from '../redux/features/boardSlice'
 import { setFavoriteList } from '../redux/features/favoriteSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import Kanban from '../components/common/Kanban';
 
 let timer;
 const timeout = 500;
@@ -19,7 +20,7 @@ const Board = () => {
     const { boardId } = useParams();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [sessions, setSessions] = useState([]);
+    const [sections, setSections] = useState([]);
     const [isFavorite, setIsFavorite] = useState(false);
     const [icon, setIcon] = useState('');
 
@@ -32,7 +33,7 @@ const Board = () => {
                 const res = await boardApi.getOne(boardId);
                 setTitle(res.data.title);
                 setDescription(res.data.description);
-                setSessions(res.data.sessions);
+                setSections(res.data.sections);
                 setIsFavorite(res.data.favorite);
             } catch (error) {
                 alert(error.message);
@@ -140,48 +141,36 @@ const Board = () => {
             </Box>
             <Box sx={{ padding: '10px 50px' }} >
                 <Box>
-                    
+                    <TextField
+                        value={title}
+                        placeholder='Untitled'
+                        variant='outlined'
+                        onChange={updateTitle}
+                        fullWidth
+                        sx={{
+                            '& .MuiOutlinedInput-input': { padding: 0 },
+                            '& .MuiOutlinedInput-notchedOutline': { border: 'unset ' },
+                            '& .MuiOutlinedInput-root': { fontSize: '2rem', fontWeight: '700' }
+                        }}
+                    />
+                    <TextField
+                        value={description}
+                        placeholder='Add a description'
+                        variant='outlined'
+                        fullWidth
+                        onChange={updateDescription}
+                        multiline
+                        sx={{
+                            '& .MuiOutlinedInput-input': { padding: 0 },
+                            '& .MuiOutlinedInput-notchedOutline': { border: 'unset ' },
+                            '& .MuiOutlinedInput-root': { fontSize: '0.8rem' }
+                        }}
+                    />
                 </Box>
-                <TextField
-                    value={title}
-                    placeholder='Untitled'
-                    variant='outlined'
-                    onChange={updateTitle}
-                    fullWidth
-                    sx={{
-                        '& .MuiOutlinedInput-input': { padding: 0 },
-                        '& .MuiOutlinedInput-notchedOutline': { border: 'unset ' },
-                        '& .MuiOutlinedInput-root': { fontSize: '2rem', fontWeight: '700' }
-                    }}
-                />
-                <TextField
-                    value={description}
-                    placeholder='Add a description'
-                    variant='outlined'
-                    fullWidth
-                    onChange={updateDescription}
-                    multiline
-                    sx={{
-                        '& .MuiOutlinedInput-input': { padding: 0 },
-                        '& .MuiOutlinedInput-notchedOutline': { border: 'unset ' },
-                        '& .MuiOutlinedInput-root': { fontSize: '0.8rem' }
-                    }}
-                />
+                <Box>
+                    <Kanban data={sections} boardId={boardId}/>
+                </Box>
             </Box>
-            {/* <Box>
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                }}>
-                    <Button>
-                        Add section
-                    </Button>
-                    <Typography >
-                        
-                    </Typography>
-                </Box>
-            </Box> */}
         </>
     )
 }

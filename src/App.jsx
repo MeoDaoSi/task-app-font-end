@@ -12,6 +12,7 @@ import Board from './pages/Board';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Index from './pages/Index';
+import './css/custom-scrollbar.css';
 
 function App() {
     const theme = createTheme({
