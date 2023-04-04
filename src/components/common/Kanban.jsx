@@ -1,9 +1,10 @@
-import { Box, Button, Typography, Divider, TextField, IconButton, Card } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
-import sectionApi from '../../apis/sectionApi'
+import { Box, Button, Typography, Divider, TextField, IconButton, Card } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import sectionApi from '../../apis/sectionApi';
+import taskApi from '../../apis/taskApi';
 
 let timer
 const timeout = 500
@@ -16,8 +17,43 @@ const Kanban = props => {
         setData(props.data);
     },[props.data])
 
-    const onDragEnd = () => {
+    const onDragEnd = async ({ source, destination }) => {
+        if (!destination) return
 
+        const sourceIndex = data.findIndex(e => e._id === source?.droppableId)
+        const destIndex = data.findIndex(e => e._id === destination?.droppableId)
+
+        const sourceSection = data[sourceIndex]
+        const destSection = data[destIndex]
+    
+        const sourceId = sourceSection._id
+        const destId = destSection._id
+    
+        const sourceTasks = [...sourceSection.tasks]
+        const destTasks = [...destSection.tasks]
+    
+        if ( source?.droppableId !== destination?.droppableId ) {
+            const [removed] = sourceTasks.splice(source?.index, 1)
+            destTasks.splice(destination?.index, 0, removed)
+            data[sourceIndex].tasks = sourceTasks
+            data[destIndex].tasks = destTasks
+        } else {
+            const [removed] = destTasks.splice(source?.index, 1)
+            destTasks.splice(destination?.index, 0, removed)
+            data[destIndex].tasks = destTasks
+        }
+        console.log(sourceId);
+        try {
+            await taskApi.updatePriority({
+                sourceList: sourceTasks,
+                destList: destTasks,
+                sourceSectionId: sourceId,
+                destSectionId: destId
+            })
+            setData(data)
+        } catch (err) {
+            alert(err)
+        }
     }
     const createSection = async () => {
         try {
@@ -53,17 +89,17 @@ const Kanban = props => {
         }, timeout);
     }
 
-    // const createTask = async (sectionId) => {
-    //     try {
-    //         const task = await taskApi.create(boardId, { sectionId })
-    //         const newData = [...data]
-    //         const index = newData.findIndex(e => e._id === sectionId)
-    //         newData[index].tasks.unshift(task)
-    //         setData(newData)
-    //     } catch (err) {
-    //         alert(err)
-    //     }
-    // }
+    const createTask = async (sectionId) => {
+        try {
+            const task = await taskApi.create({ sectionId })
+            const newData = [...data]
+            const index = newData.findIndex(e => e._id === sectionId)
+            newData[index].tasks.unshift(task.data)
+            setData(newData)
+        } catch (err) {
+            alert(err)
+        }
+    }
 
     return (
         <>
@@ -91,7 +127,7 @@ const Kanban = props => {
                     {
                         data.map(section => (
                             <div key={section._id} style={{ width: '300px' }}>
-                                <Droppable key={section._id} droppableId={section._id} >
+                                <Droppable key={section?._id} droppableId={section?._id} >
                                     {(provided) => (
                                         <Box
                                             ref={provided.innerRef}
@@ -109,7 +145,7 @@ const Kanban = props => {
                                                 marginBottom: '10px'
                                             }}>
                                                 <TextField
-                                                    value={section.title}
+                                                    value={section?.title}
                                                     onChange={(e) => updateSectionTitle(e, section._id)}
                                                     placeholder='untitled'
                                                     variant='outlined'
@@ -127,7 +163,7 @@ const Kanban = props => {
                                                         color: 'gray',
                                                         '&:hover': { color: 'green' }
                                                     }}
-                                                    // onClick={() => createTask(section._id)}
+                                                    onClick={() => createTask(section._id)}
                                                 >
                                                     <AddOutlinedIcon />
                                                 </IconButton>
@@ -143,9 +179,9 @@ const Kanban = props => {
                                                     <DeleteOutlinedIcon />
                                                 </IconButton>
                                             </Box>
-                                            {/* {
+                                            {
                                                 section.tasks.map((task, index) => (
-                                                <Draggable key={task._id} draggableId={task._id} index={index}>
+                                                <Draggable key={task?._id} draggableId={task?._id} index={index}>
                                                     {(provided, snapshot) => (
                                                     <Card
                                                         ref={provided.innerRef}
@@ -156,17 +192,17 @@ const Kanban = props => {
                                                             marginBottom: '10px',
                                                             cursor: snapshot.isDragging ? 'grab' : 'pointer!important'
                                                         }}
-                                                        onClick={() => setSelectedTask(task)}
+                                                        // onClick={() => setSelectedTask(task)}
                                                     >
                                                         <Typography>
-                                                        {task.title === '' ? 'Untitled' : task.title}
+                                                        {task?.title === '' ? 'Untitled' : task?.title}
                                                         </Typography>
                                                     </Card>
                                                     )}
                                                 </Draggable>
                                                 ))
-                                            } */}
-                                            {/* {provided.placeholder} */}
+                                            }
+                                            {provided.placeholder}
                                         </Box>
                                     )}
                                 </Droppable>
