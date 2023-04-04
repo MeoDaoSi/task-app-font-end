@@ -5,6 +5,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import sectionApi from '../../apis/sectionApi';
 import taskApi from '../../apis/taskApi';
+import Task from './Task'
 
 let timer
 const timeout = 500
@@ -12,13 +13,15 @@ const timeout = 500
 const Kanban = props => {
     const boardId = props.boardId;
     const [data, setData] = useState([]);
+    const [selectedTask, setSelectedTask] = useState(undefined);
 
     useEffect( () => {
         setData(props.data);
     },[props.data])
 
     const onDragEnd = async ({ source, destination }) => {
-        if (!destination) return
+        if (!destination) return;
+        if (!source) return;
 
         const sourceIndex = data.findIndex(e => e._id === source?.droppableId)
         const destIndex = data.findIndex(e => e._id === destination?.droppableId)
@@ -42,7 +45,6 @@ const Kanban = props => {
             destTasks.splice(destination?.index, 0, removed)
             data[destIndex].tasks = destTasks
         }
-        console.log(sourceId);
         try {
             await taskApi.updatePriority({
                 sourceList: sourceTasks,
@@ -51,7 +53,7 @@ const Kanban = props => {
                 destSectionId: destId
             })
             setData(data)
-        } catch (err) {
+        }catch (err) {
             alert(err)
         }
     }
@@ -101,6 +103,23 @@ const Kanban = props => {
         }
     }
 
+    const onUpdateTask = (task) => {
+        const newData = [...data]
+        const sectionIndex = newData.findIndex(e => e._id === task.section)
+        console.log(sectionIndex);
+        const taskIndex = newData[sectionIndex].tasks.findIndex(e => e._id === task._id)
+        newData[sectionIndex].tasks[taskIndex] = task
+        setData(newData)
+    }
+
+    const onDeleteTask = (task) => {
+        const newData = [...data]
+        const sectionIndex = newData.findIndex(e => e._id === task.section)
+        const taskIndex = newData[sectionIndex].tasks.findIndex(e => e._id === task._id)
+        newData[sectionIndex].tasks.splice(taskIndex, 1)
+        setData(newData)
+    }
+
     return (
         <>
             <Box sx={{
@@ -125,8 +144,8 @@ const Kanban = props => {
                     overflowX: 'auto'
                 }}>
                     {
-                        data.map(section => (
-                            <div key={section._id} style={{ width: '300px' }}>
+                        data.map( section => (
+                            <div key={section?._id} style={{ width: '300px' }}>
                                 <Droppable key={section?._id} droppableId={section?._id} >
                                     {(provided) => (
                                         <Box
@@ -192,7 +211,7 @@ const Kanban = props => {
                                                             marginBottom: '10px',
                                                             cursor: snapshot.isDragging ? 'grab' : 'pointer!important'
                                                         }}
-                                                        // onClick={() => setSelectedTask(task)}
+                                                        onClick={() => setSelectedTask(task)}
                                                     >
                                                         <Typography>
                                                         {task?.title === '' ? 'Untitled' : task?.title}
@@ -211,6 +230,13 @@ const Kanban = props => {
                     }
                 </Box>
             </DragDropContext>
+            <Task
+                task={selectedTask}
+                boardId={boardId}
+                onClose={() => setSelectedTask(undefined)}
+                onUpdate={onUpdateTask}
+                onDelete={onDeleteTask}
+            />
         </>
     )
 }
