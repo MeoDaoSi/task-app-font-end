@@ -40,10 +40,10 @@ function MainFeaturedPost(props) {
         <Grid container>
             <Grid item md={3} mt= {2} mb= {2} ml= {4} mr= {2}>
                 <CardActionArea component="a" href="#">
-                        <Typography component="h7" variant="h5" sx={{textDecoration: 'underline', fontStyle: 'italic'}}>
+                        <Typography component="h5" variant="h5" sx={{textDecoration: 'underline', fontStyle: 'italic'}}>
                             {post.title}
                         </Typography>
-                        <Typography component="h7" variant="h5" sx={{textDecoration: 'underline', fontStyle: 'italic'}} ml= {1} >
+                        <Typography component="h5" variant="h5" sx={{textDecoration: 'underline', fontStyle: 'italic'}} ml= {1} >
                             {post.icon}
                         </Typography>
                 </CardActionArea>

@@ -23,15 +23,15 @@ function App() {
                 <CssBaseLine/>
                 <BrowserRouter>
                     <Routes>
-                        {/* <Route path='/'>
+                        <Route path='/'>
                             <Route index element={<Index/>}/>
-                        </Route> */}
+                        </Route>
                         <Route path='/' element={<AuthLayout/>}>
                             <Route path='login' element={<Login/>}/>
                             <Route path='signup' element={<Signup/>}/>
                         </Route>
                         <Route path='/' element={<AppLayout/>}>
-                            <Route index element={<Home/>}/>
+                            {/* <Route index element={<Home/>}/> */}
                             <Route path='boards' element={<Home/>}/>
                             <Route path='boards/:boardId' element={<Board/>}/>
                         </Route>
