@@ -7,8 +7,8 @@ const taskApi = {
         params
     ),
     delete: (taskId) => axiosClient.delete(`/tasks/${taskId}`),
-    update: (boardId, taskId, params) => axiosClient.put(
-        `boards/${boardId}/tasks/${taskId}`,
+    update: (taskId, params) => axiosClient.patch(
+        `/tasks/${taskId}`,
         params
     )
 }

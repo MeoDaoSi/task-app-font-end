@@ -15,11 +15,9 @@ const AppLayout = () => {
     useEffect(() => {
         const checkAuth = async () => {
             const user = await authUtils.isAuthenticated();
-            console.log(user);
             if (!user) {
                 navigate('/login');
             }else{
-                console.log(user);
                 dispatch(setUser(user));
                 setLoading(false);
             }

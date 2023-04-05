@@ -6,6 +6,12 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import taskApi from '../../apis/taskApi'
 
+import '../../css/custom_editor.css'
+
+let timer
+const timeout = 500
+let isModalClosed = false
+
 const modalStyle = {
     outline: 'none',
     position: 'absolute',
@@ -21,18 +27,33 @@ const modalStyle = {
 }
 
 const Task = props => {
-    const boardId = props.boardId
-    const [task, setTask] = useState(props.task)
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
+    const boardId = props.boardId;
+    const [task, setTask] = useState(props.task);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const editorWrapperRef = useRef()
 
     useEffect(() => {
         setTask(props.task)
         setTitle(props.task !== undefined ? props.task.title : '')
         setDescription(props.task !== undefined ? props.task.description : '')
+        if (props.task !== undefined) {
+            isModalClosed = false;
+            updateEditorHeight()
+        }
     }, [props.task])
+
+    const updateEditorHeight = () => {
+        setTimeout(() => {
+            if (editorWrapperRef.current) {
+                const box = editorWrapperRef.current
+                box.querySelector('.ck-editor__editable_inline').style.height = (box.offsetHeight - 50) + 'px'
+            }
+        }, timeout)
+    }
     
     const onClose = () => {
+        isModalClosed = true;
         props.onUpdate(task);
         props.onClose();
     }
@@ -46,8 +67,37 @@ const Task = props => {
         }
     }
 
-    const updateTitle = async () => {
-        
+    const updateTitle = async (e) => {
+        clearTimeout(timer)
+        const newTitle = e.target.value
+        timer = setTimeout(async () => {
+            try {
+                await taskApi.update(task._id, { title: newTitle })
+            } catch (err) {
+                alert(err)
+            }
+        }, timeout)
+        task.title = newTitle
+        setTitle(newTitle)
+        props.onUpdate(task)
+    }
+    const updateDescription = async (event, editor) => {
+        clearTimeout(timer)
+        const data = editor.getData()
+            
+        if (!isModalClosed) {
+            timer = setTimeout(async () => {
+                try {
+                    await taskApi.update(task._id, { description: data })
+                } catch (err) {
+                    alert(err)
+                }
+            }, timeout);
+    
+            task.description = data
+            setDescription(data)
+            props.onUpdate(task)
+        }
     }
 
     return (
@@ -95,7 +145,7 @@ const Task = props => {
                         </Typography>
                         <Divider sx={{ margin: '1.5rem 0' }} />
                         <Box
-                            // ref={editorWrapperRef}
+                            ref={editorWrapperRef}
                             sx={{
                                 position: 'relative',
                                 height: '80%',
@@ -106,9 +156,9 @@ const Task = props => {
                             <CKEditor
                                 editor={ClassicEditor}
                                 data={description}
-                                // onChange={updateContent}
-                                // onFocus={updateEditorHeight}
-                                // onBlur={updateEditorHeight}
+                                onChange={updateDescription}
+                                onFocus={updateEditorHeight}
+                                onBlur={updateEditorHeight}
                             />
                         </Box>
                     </Box>
