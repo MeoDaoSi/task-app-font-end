@@ -23,20 +23,20 @@ function Footer(props) {
 
     return (
         <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6 }}>
-        <Container maxWidth="lg">
-            <Typography variant="h6" align="center" gutterBottom>
-            {title}
-            </Typography>
-            <Typography
-            variant="subtitle1"
-            align="center"
-            color="text.secondary"
-            component="p"
-            >
-            {description}
-            </Typography>
-            <Copyright />
-        </Container>
+            <Container maxWidth="lg">
+                <Typography variant="h6" align="center" gutterBottom>
+                    {title}
+                </Typography>
+                <Typography
+                    variant="subtitle1"
+                    align="center"
+                    color="text.secondary"
+                    component="p"
+                >
+                    {description}
+                </Typography>
+                <Copyright />
+            </Container>
         </Box>
     );
 }

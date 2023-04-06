@@ -6,6 +6,8 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import CardActionArea from '@mui/material/CardActionArea';
+import Button from '@mui/material/Button';
+
 
 function MainFeaturedPost(props) {
     const { post } = props;
@@ -24,31 +26,36 @@ function MainFeaturedPost(props) {
                 backgroundImage: `url(${post.image})`,
                 width: '100%',
                 height: '100vh',
+                
             }}
         >
-        {<img style={{ display: 'none' }} src={post.image} />}
-        <Box
-            sx={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                right: 0,
-                left: 0,
-                backgroundColor: 'rgba(0,0,0,.3)',
-            }}
-        />
-        <Grid container>
-            <Grid item md={3} mt= {2} mb= {2} ml= {4} mr= {2}>
-                <CardActionArea component="a" href="#">
-                        <Typography component="h5" variant="h5" sx={{textDecoration: 'underline', fontStyle: 'italic'}}>
-                            {post.title}
-                        </Typography>
-                        <Typography component="h5" variant="h5" sx={{textDecoration: 'underline', fontStyle: 'italic'}} ml= {1} >
-                            {post.icon}
-                        </Typography>
-                </CardActionArea>
-            </Grid>
-        </Grid>
+            {<img style={{ display: 'none' }} src={post.image} />}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: 0,
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    backgroundColor: 'rgba(0,0,0,.3)',
+                }}
+            />
+            <Typography
+                component="a"
+                href="#"
+                color="inherit"
+                align="center"
+                noWrap
+                sx={{
+                    display: 'flex',
+                    flex: 1,
+                    textDecoration: 'underline',
+                    fontStyle: 'italic',
+                    pt: 1, pl: 3, 
+                }}
+            >
+                <Button color="inherit" component="a" href="#" size="large">{post.title} {post.icon}</Button>
+            </Typography>
         </Paper>
     );
 }

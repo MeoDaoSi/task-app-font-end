@@ -12,39 +12,43 @@ import CardMedia from '@mui/material/CardMedia';
 import image from '../images/logo_size.jpg';
 import Grid from '@mui/material/Grid';
 
-function Header(props) {
-    const { sections, title } = props;
-    console.log(image);
-
+function Header() {
     return (
         <React.Fragment>
-        <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Grid item xs={12} md={12}>
-                <CardActionArea component="a" href="#" inline='block' >
-                        <CardMedia
-                            component="img"
-                            sx={{ width: 70, display: { xs: 'none', sm: 'block' }, mt: 2, mb: 2, ml: 2, mr: 2 }}
-                            image={image}
-                        />
-                </CardActionArea>
-            </Grid>
-            <Button component="a" href="#" size="medium">PlanET</Button>
-            <Button component="a" href="#" size="medium">Workspace</Button>
-            <Typography
-                component="a"
-                variant="h5"
-                color="inherit"
-                align="center"
-                noWrap
-                sx={{ flex: 1 }}
-            >
-
-            </Typography>
-            <Button variant="outlined" size="small" component="a" href="#">
-                Sign up
-            </Button>
-        
-        </Toolbar>
+            <Toolbar sx={{ 
+                borderBottom: 1,
+                borderColor: 'divider',
+                display: 'flex',
+            }}>
+                <Grid>
+                    <CardActionArea component="a" href="#" inline='block' >
+                            <CardMedia
+                                component="img"
+                                sx={{ width: 70, mt: 2, mb: 2, ml: 2, mr: 2 }}
+                                image={image}
+                            />
+                    </CardActionArea>
+                </Grid>
+                <Typography
+                    color="inherit"
+                    align="center"
+                    noWrap
+                    sx={{
+                        display: 'flex',
+                        flex: 1,
+                    }}
+                >
+                    <Button component="a" href="#" size="large">Home</Button>
+                    <Button component="a" href="#" size="large">Workspace</Button>
+                    <Button component="a" href="#" size="large">Workspace</Button>
+                    <Button component="a" href="#" size="large">Workspace</Button>
+                    <Button component="a" href="#" size="large">Workspace</Button>
+                </Typography>
+                <Button variant="outlined" size="medium" component="a" href="#">
+                    Sign up
+                </Button>
+            
+            </Toolbar>
         </React.Fragment>
     );
 }
