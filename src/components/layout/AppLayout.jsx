@@ -6,6 +6,8 @@ import authUtils from '../../utils/authUtils';
 import Loading from '../common/Loading';
 import Sidebar from '../common/Sidebar';
 import { setUser } from '../../redux/features/userSlice'
+import Header from '../../assets/js/Header';
+import Footer from '../../assets/js/Footer';
 
 const AppLayout = () => {
     const navigate = useNavigate();
@@ -41,6 +43,7 @@ const AppLayout = () => {
                     <Outlet/>
                 </Box>
             </Box>
+        
         )
     )
 }

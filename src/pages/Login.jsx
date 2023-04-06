@@ -41,7 +41,7 @@ const Login = () => {
             })
             setLoading(false);
             localStorage.setItem('token', response.data.token);
-            navigate('/');  
+            navigate('/boards');  
         } catch (error) {
             alert('tai khoan hoac mat khau khong dung')
             setLoading(false);

@@ -9,8 +9,9 @@ import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardMedia from '@mui/material/CardMedia';
-import image from '../images/logo_size.jpg';
+import image from '../images/imageedit_1_6003449786.png';
 import Grid from '@mui/material/Grid';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 function Header() {
     return (
@@ -21,10 +22,10 @@ function Header() {
                 display: 'flex',
             }}>
                 <Grid>
-                    <CardActionArea component="a" href="#" inline='block' >
+                    <CardActionArea component="a" href="/" inline='block' >
                             <CardMedia
                                 component="img"
-                                sx={{ width: 70, mt: 2, mb: 2, ml: 2, mr: 2 }}
+                                sx={{ width: 100 }}
                                 image={image}
                             />
                     </CardActionArea>
@@ -38,16 +39,16 @@ function Header() {
                         flex: 1,
                     }}
                 >
-                    <Button component="a" href="#" size="large">Home</Button>
+                    <Button component="a" href="/" size="large">Home</Button>
+                    <Button component="a" href="/boards" size="large">Workspace</Button>
+                    {/* <Button component="a" href="#" size="large">Workspace</Button>
                     <Button component="a" href="#" size="large">Workspace</Button>
-                    <Button component="a" href="#" size="large">Workspace</Button>
-                    <Button component="a" href="#" size="large">Workspace</Button>
-                    <Button component="a" href="#" size="large">Workspace</Button>
+                    <Button component="a" href="#" size="large">Workspace</Button> */}
                 </Typography>
-                <Button variant="outlined" size="medium" component="a" href="#">
-                    Sign up
+                <Button variant="outlined" size="medium" component="a" href="/login">
+                    login
                 </Button>
-            
+                <Button component="a" href="/boards" size="large"><AccountCircleIcon/></Button>
             </Toolbar>
         </React.Fragment>
     );

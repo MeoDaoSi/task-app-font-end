@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { setBoards } from '../../redux/features/boardSlice';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import FavoriteList from './FavoriteList';
+import HomeIcon from '@mui/icons-material/Home';
 
 const Sidebar = () => {
     const user = useSelector((state) => state.user.value)
@@ -43,6 +44,9 @@ const Sidebar = () => {
     const logout = () => {
         localStorage.removeItem('token');
         navigate('/login');
+    }
+    const home = () => {
+        navigate('/');
     }
 
     const onDragEnd = async ({source, destination}) => {
@@ -89,7 +93,7 @@ const Sidebar = () => {
                 sx={{
                     width: sidebarWidth,
                     height: '100vh',
-                    backgroundColor: assets.colors.secondary
+                    backgroundColor: assets.colors.bg
                 }}
             >
                 <ListItem>
@@ -101,9 +105,12 @@ const Sidebar = () => {
                     }}>
                         <Typography variant='body2' fontWeight='700'>
                             {user.name}
+                            <IconButton onClick={logout}>
+                                <LogoutOutlinedIcon fontSize='small' />
+                            </IconButton>
                         </Typography>
-                        <IconButton onClick={logout}>
-                            <LogoutOutlinedIcon fontSize='small' />
+                        <IconButton onClick={home}>
+                            <HomeIcon/>
                         </IconButton>
                     </Box>
                 </ListItem>

@@ -41,8 +41,6 @@ function MainFeaturedPost(props) {
                 }}
             />
             <Typography
-                component="a"
-                href="#"
                 color="inherit"
                 align="center"
                 noWrap
@@ -54,7 +52,7 @@ function MainFeaturedPost(props) {
                     pt: 1, pl: 3, 
                 }}
             >
-                <Button color="inherit" component="a" href="#" size="large">{post.title} {post.icon}</Button>
+                <Button color="inherit" component="a" href="/boards" size="large">{post.title} {post.icon}</Button>
             </Typography>
         </Paper>
     );

@@ -4,6 +4,8 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import authUtils from '../../utils/authUtils';
 import Loading from '../common/Loading';
 import assets from '../../assets';
+import Header from '../../assets/js/Header';
+import Footer from '../../assets/js/Footer';
 
 const AuthLayout = () => {
     const navigate = useNavigate();
@@ -16,7 +18,7 @@ const AuthLayout = () => {
             if (!isAuth) {
                 setLoading(false);
             }else{
-                navigate('/');
+                navigate('/boards');
             }
         }
         checkAuth();
@@ -26,17 +28,24 @@ const AuthLayout = () => {
                 <Loading fullHeight/>
         ) :
         (
-            <Container component='main' maxWidth='xs'>       
-                <Box sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                }}>
-                    <img src={assets.images.logoDark} style={{width: '100px'}} alt='' />
-                    <Outlet/>
-                </Box>
-            </Container>
+            <Box>
+                <Header />
+                <Container component='main' maxWidth='xs'>       
+                    <Box sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                    }}>
+                        <img src={assets.images.logoDark} style={{width: '100px'}} alt='' />
+                        <Outlet/>
+                    </Box>
+                </Container>
+                <Footer
+                    title="Plannet"
+                    description="Do Not Sell or Share My Info"
+                />
+            </Box>
         )
     )
 }
