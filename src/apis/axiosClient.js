@@ -2,7 +2,8 @@ import axios from 'axios';
 import queryString from 'query-string';
 
 const baseURL = 'http://localhost:80'
-const getToken = () => localStorage.getItem('token');     
+const getToken = () => localStorage.getItem('token');
+const getTokenAdmin = () => localStorage.getItem('tokenAdmin');     
 
 const axiosClient = axios.create({
     baseURL
@@ -14,7 +15,8 @@ axiosClient.interceptors.request.use( async config => {
         ...config,
         headers:{
             'Content-Type': 'application/json',
-            'authorization': `Bearer ${getToken()}`
+            'authorization': `Bearer ${getToken()}`,
+            'authentizationAdmin': `Bearer ${getTokenAdmin()}`
         }
     }
 })

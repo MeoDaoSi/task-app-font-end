@@ -8,12 +8,14 @@ import { BrowserRouter, Route, Routes, Router } from 'react-router-dom';
 
 import AppLayout from './components/layout/AppLayout';
 import AuthLayout from './components/layout/AuthLayout';
+import AuthAdminLayout from './components/layout/AuthAdminLayout';
 import AdminLayout from './components/layout/AdminLayout';
 
 import Workspace from './pages/Workspace.jsx';
 import Board from './pages/Board';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
+import LoginAdmin from './pages/LoginAdmin';
 import Home from './pages/Home';
 import Admin from './pages/Admin';
 import './css/custom-scrollbar.css';
@@ -46,6 +48,9 @@ function App() {
                             {/* <Route index element={<Workspace/>}/> */}
                             <Route path='boards' element={<Workspace/>}/>
                             <Route path='boards/:boardId' element={<Board/>}/>
+                        </Route>
+                        <Route path='/' element={<AuthAdminLayout/>}>
+                            <Route path='admin/login' element={<LoginAdmin/>}/>
                         </Route>
                         <Route path='/' element={<AdminLayout/>}>
                             <Route path='admin' element={<Admin/>}/>

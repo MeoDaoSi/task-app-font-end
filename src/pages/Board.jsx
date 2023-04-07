@@ -86,11 +86,15 @@ const Board = () => {
         try {
             const board = await boardApi.update( boardId, { favorite: isFavorite ? false : true })
             let newFavoriteList = [...favoriteList];
+            let newBoardList = [...boards];
             if (isFavorite) {
-                newFavoriteList = newFavoriteList.filter(e => e._id !== boardId)
+                newFavoriteList = newFavoriteList.filter(e => e._id !== boardId);
+                newBoardList.unshift(board.data);
             } else {
-                newFavoriteList.unshift(board.data)
+                newFavoriteList.unshift(board.data);
+                newBoardList = newBoardList.filter(e => e._id !== boardId);
             }
+            dispatch(setBoards(newBoardList));
             dispatch(setFavoriteList(newFavoriteList))
             setIsFavorite(!isFavorite)
         } catch (error) {
