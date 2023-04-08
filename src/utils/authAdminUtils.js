@@ -3,6 +3,7 @@ import authAdminApi from "../apis/authAdminApi";
 const authAdminUtils = {
     isAuthenticated: async () => {
         const token = localStorage.getItem('tokenAdmin');
+        console.log(token);
         if (!token) {
             return false;
         }

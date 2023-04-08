@@ -17,8 +17,9 @@ const AdminLayout = () => {
     useEffect(() => {
         const checkAuth = async () => {
             const admin = await authAdminUtils.isAuthenticated();
-            console.log(admin);
+            // console.log(admin);
             if (!admin) {
+                console.log('hello1');
                 navigate('/admin/login');
             }else{
                 dispatch(setAdmin(admin));

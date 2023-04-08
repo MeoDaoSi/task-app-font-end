@@ -15,7 +15,7 @@ const AuthAdminLayout = () => {
     useEffect(() => {
         const checkAuthAdmin = async () => {
             const isAuth = await authAdminUtils.isAuthenticated();
-            
+            console.log(isAuth);
             if (!isAuth) {
                 setLoading(false);
             }else{

@@ -1,10 +1,5 @@
 import * as React from 'react';
 import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import Box from '@mui/material/Box';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
@@ -17,12 +12,17 @@ import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputCompone
 import TimerIcon from '@mui/icons-material/Timer';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import { Box, Drawer, List, ListItemButton, IconButton, Typography, ListItem } from '@mui/material';
+import { Link, useNavigate, useParams } from 'react-router-dom'
+
 
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardMedia from '@mui/material/CardMedia';
 import image from '../images/imageedit_1_6003449786.png';
 import Grid from '@mui/material/Grid';
+import authAdminApi from '../../apis/authAdminApi'
 
 const categories = [
     {
@@ -69,18 +69,35 @@ const categories = [
 };
 
 export default function Navigator(props) {
+    const navigate = useNavigate();
     const { ...other } = props;
-
+    const logout = async () => {
+        try {
+            await authAdminApi.logout();
+            localStorage.removeItem('tokenAdmin');
+            navigate('/admin/login');
+        } catch (error) {
+            alert(error.message);
+        }
+    }
     return (
         <Drawer variant="permanent" {...other} sx={{ width: 100, display: 'flex' }}>
             <List disablePadding>
                 <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff', display: 'flex' }}>
-                    <CardMedia
-                        component="img"
-                        sx={{ width: 100, display: 'flex' }}
-                        image={image}
-                    />
-                    ADMIN
+                    <Grid>
+                        <CardActionArea >
+                            <CardMedia
+                                component="img"
+                                sx={{ width: 100, display: 'flex' }}
+                                image={image}
+                            />
+                        </CardActionArea>
+                    </Grid>
+                        <CardActionArea component='h5' >
+                            ADMIN
+                        </CardActionArea>
+                        
+                    
                 </ListItem>
                 <ListItem sx={{ ...item, ...itemCategory }}>
                     <ListItemIcon>
@@ -89,6 +106,9 @@ export default function Navigator(props) {
                     <ListItemText>
                         Admin
                     </ListItemText>
+                    <IconButton onClick={logout} color=''>
+                            <LogoutOutlinedIcon style={{ color: 'ffffff' }} fontSize='small' />
+                    </IconButton>
                 </ListItem>
                 {categories.map(({ id, children }) => (
                     <Box key={id} sx={{ bgcolor: '#101F33' }}>

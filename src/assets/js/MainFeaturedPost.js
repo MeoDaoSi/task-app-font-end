@@ -41,6 +41,7 @@ function MainFeaturedPost(props) {
                 }}
             />
             <Typography
+                variant='h6'
                 color="inherit"
                 align="center"
                 noWrap
