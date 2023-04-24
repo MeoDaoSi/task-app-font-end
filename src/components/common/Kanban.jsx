@@ -6,6 +6,7 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import sectionApi from '../../apis/sectionApi';
 import taskApi from '../../apis/taskApi';
 import Task from './Task'
+import AlarmIcon from '@mui/icons-material/Alarm';
 
 let timer
 const timeout = 500
@@ -74,6 +75,11 @@ const Kanban = props => {
             alert(err);
         }
     }
+    const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
     const updateSectionTitle = async (e, sectionId) => {
         clearTimeout(timer)
@@ -106,7 +112,6 @@ const Kanban = props => {
     const onUpdateTask = (task) => {
         const newData = [...data]
         const sectionIndex = newData.findIndex(e => e._id === task.section)
-        console.log(sectionIndex);
         const taskIndex = newData[sectionIndex].tasks.findIndex(e => e._id === task._id)
         newData[sectionIndex].tasks[taskIndex] = task
         setData(newData)
@@ -214,8 +219,12 @@ const Kanban = props => {
                                                         onClick={() => setSelectedTask(task)}
                                                     >
                                                         <Typography>
-                                                        {task?.title === '' ? 'Untitled' : task?.title}
+                                                            {task?.title === '' ? 'Untitled' : task?.title}
+                                                            
                                                         </Typography>
+                                                        <IconButton size="small">
+                                                                <AlarmIcon />
+                                                            </IconButton>
                                                     </Card>
                                                     )}
                                                 </Draggable>

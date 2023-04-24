@@ -5,11 +5,13 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import boardApi from '../../apis/boardApi';
+import authApi from '../../apis/authApi';
 import { useEffect, useState } from 'react';
 import { setBoards } from '../../redux/features/boardSlice';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import FavoriteList from './FavoriteList';
-import HomeIcon from '@mui/icons-material/Home';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import '../../css/style.css'
 
 const Sidebar = () => {
     const user = useSelector((state) => state.user.value)
@@ -41,12 +43,14 @@ const Sidebar = () => {
         setActiveIndex(activeItem);
     }, [boards, boardId, navigate])
 
-    const logout = () => {
+    const logout = async () => {
+        try {
+            await authApi.logout();
+        } catch (error) {
+            alert(error.message);
+        }
         localStorage.removeItem('token');
         navigate('/login');
-    }
-    const home = () => {
-        navigate('/');
     }
 
     const onDragEnd = async ({source, destination}) => {
@@ -109,9 +113,14 @@ const Sidebar = () => {
                                 <LogoutOutlinedIcon fontSize='small' />
                             </IconButton>
                         </Typography>
-                        <IconButton onClick={home}>
-                            <HomeIcon/>
+                        <IconButton class="dropdown">
+                            <NotificationsNoneIcon/>
                         </IconButton>
+                        <div id="myDropdown" class="dropdown-content">
+                            <a href="#">Notification 1</a>
+                            <a href="#">Notification 2</a>
+                            <a href="#">Notification 3</a>
+                        </div>
                     </Box>
                 </ListItem>
                 <Box sx={{ paddingTop: '10px'}}/>

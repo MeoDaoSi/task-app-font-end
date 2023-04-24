@@ -5,6 +5,8 @@ import Moment from 'moment'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import taskApi from '../../apis/taskApi'
+import MyComponent from './Date'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 import '../../css/custom_editor.css'
 
@@ -83,11 +85,14 @@ const Task = props => {
     }
     const updateDescription = async (event, editor) => {
         clearTimeout(timer)
-        const data = editor.getData()
-            
+        const stringWithHtml = editor.getData()
+        const data = '';
+        
         if (!isModalClosed) {
             timer = setTimeout(async () => {
                 try {
+                    // convert html to string
+                    const data = stringWithHtml.replace(/<\/?[^>]+(>|$)/g, "");
                     await taskApi.update(task._id, { description: data })
                 } catch (err) {
                     alert(err)
@@ -140,9 +145,10 @@ const Task = props => {
                                 marginBottom: '10px'
                             }}
                         />
-                        <Typography variant='body2' fontWeight='700'>
-                            {task !== undefined ? Moment(task.createdAt).format('YYYY-MM-DD') : ''}
-                        </Typography>
+                        <form method="post">
+                            <input type="date" />
+                            <button>Save</button>
+                        </form>
                         <Divider sx={{ margin: '1.5rem 0' }} />
                         <Box
                             ref={editorWrapperRef}

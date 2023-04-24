@@ -85,7 +85,7 @@ const FavoriteList = () => {
                                 fontWeight='700'
                                 sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
                                 >
-                                {item.title}
+                                {item.title !== "" ? item.title : "Untitled" }
                                 </Typography>
                             </ListItemButton>
                             )}
