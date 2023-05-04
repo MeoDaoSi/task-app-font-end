@@ -77,9 +77,9 @@ const Kanban = props => {
     }
     const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
+    const handleDateChange = (date) => {
+        // setSelectedDate(date);
+    };
 
     const updateSectionTitle = async (e, sectionId) => {
         clearTimeout(timer)
@@ -111,9 +111,11 @@ const Kanban = props => {
 
     const onUpdateTask = (task) => {
         const newData = [...data]
-        const sectionIndex = newData.findIndex(e => e._id === task.section)
-        const taskIndex = newData[sectionIndex].tasks.findIndex(e => e._id === task._id)
-        newData[sectionIndex].tasks[taskIndex] = task
+        const sectionIndex = newData.findIndex(e => e._id === task?.section)
+        const taskIndex = newData[sectionIndex]?.tasks.findIndex(e => e._id === task._id)
+        if(taskIndex){
+            newData[sectionIndex].tasks[taskIndex] = task
+        }
         setData(newData)
     }
 
@@ -223,8 +225,9 @@ const Kanban = props => {
                                                             
                                                         </Typography>
                                                         <IconButton size="small">
-                                                                <AlarmIcon />
-                                                            </IconButton>
+                                                            <AlarmIcon />
+                                                        </IconButton>
+                                                        5/4/2023
                                                     </Card>
                                                     )}
                                                 </Draggable>

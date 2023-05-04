@@ -6,6 +6,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import taskApi from '../../apis/taskApi'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import BasicDatePicker from '../common/Date'
 
 import '../../css/custom_editor.css'
 
@@ -144,10 +145,10 @@ const Task = props => {
                                 marginBottom: '10px'
                             }}
                         />
-                        <form method="post">
-                            <input type="date" />
-                            <button>Save</button>
-                        </form>
+                        <Box>
+                            <BasicDatePicker size="small"/>
+                        </Box>
+                        
                         <Divider sx={{ margin: '1.5rem 0' }} />
                         <Box
                             ref={editorWrapperRef}

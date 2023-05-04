@@ -48,7 +48,7 @@ const Signup = () => {
             })
             localStorage.setItem('token', response.data.token);
             setLoading(false);
-            navigate('/');  
+            navigate('/boards');  
         } catch (error) {
             const errorMessage = error?.response?.data?.errors;
             if(errorMessage?.name){

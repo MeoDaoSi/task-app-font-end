@@ -10,8 +10,7 @@ import { useEffect, useState } from 'react';
 import { setBoards } from '../../redux/features/boardSlice';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import FavoriteList from './FavoriteList';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import '../../css/style.css'
+import LongMenu from '../common/Notification'
 
 const Sidebar = () => {
     const user = useSelector((state) => state.user.value)
@@ -113,14 +112,11 @@ const Sidebar = () => {
                                 <LogoutOutlinedIcon fontSize='small' />
                             </IconButton>
                         </Typography>
-                        <IconButton class="dropdown">
-                            <NotificationsNoneIcon/>
+                        <IconButton>
+                            {/* <NotificationsNoneIcon/> */}
                         </IconButton>
-                        <div id="myDropdown" class="dropdown-content">
-                            <a href="#">Notification 1</a>
-                            <a href="#">Notification 2</a>
-                            <a href="#">Notification 3</a>
-                        </div>
+                            <LongMenu />
+                        
                     </Box>
                 </ListItem>
                 <Box sx={{ paddingTop: '10px'}}/>
