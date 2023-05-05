@@ -146,7 +146,9 @@ const Task = props => {
                             }}
                         />
                         <Box>
-                            <BasicDatePicker size="small"/>
+                            <BasicDatePicker
+                                taskId={task?._id}
+                            />
                         </Box>
                         
                         <Divider sx={{ margin: '1.5rem 0' }} />

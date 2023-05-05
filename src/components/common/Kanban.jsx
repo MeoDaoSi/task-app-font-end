@@ -206,7 +206,13 @@ const Kanban = props => {
                                                 </IconButton>
                                             </Box>
                                             {
-                                                section.tasks.map((task, index) => (
+                                                section.tasks.map((task, index) => {
+                                                const date = task?.dueDate;
+                                                
+                                                const currentDate = new Date(date);
+                                                const formattedDate = currentDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+                                                
+                                                return (
                                                 <Draggable key={task?._id} draggableId={task?._id} index={index}>
                                                     {(provided, snapshot) => (
                                                     <Card
@@ -227,11 +233,11 @@ const Kanban = props => {
                                                         <IconButton size="small">
                                                             <AlarmIcon />
                                                         </IconButton>
-                                                        5/4/2023
+                                                        {formattedDate !== 'Invalid Date' ? formattedDate : '' }
                                                     </Card>
                                                     )}
                                                 </Draggable>
-                                                ))
+                                                )})
                                             }
                                             {provided.placeholder}
                                         </Box>
