@@ -10,7 +10,8 @@ const taskApi = {
     update: (taskId, params) => axiosClient.patch(
         `/tasks/${taskId}`,
         params
-    )
+    ),
+    getAll: () => axiosClient.get('/tasks')
 }
 
 export default taskApi

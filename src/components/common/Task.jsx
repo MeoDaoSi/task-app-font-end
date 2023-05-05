@@ -7,6 +7,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import taskApi from '../../apis/taskApi'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import BasicDatePicker from '../common/Date'
+import notificationApi from '../../apis/notificationApi';
 
 import '../../css/custom_editor.css'
 
@@ -33,6 +34,8 @@ const Task = props => {
     const [task, setTask] = useState(props.task);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [expiringTasks, setExpiringTasks] = useState([]);
+
     const editorWrapperRef = useRef()
 
     useEffect(() => {
@@ -44,6 +47,43 @@ const Task = props => {
             updateEditorHeight()
         }
     }, [props.task])
+    useEffect(  () => {
+        // const interval = setInterval(() => {
+            const getTasks = async () => {
+                try {
+                    const res = await taskApi.getAll();
+                    const tasks = res.data;
+                    const now = new Date();
+                    const expiringTasks = tasks.filter((task) => {
+                        const exprDate = new Date(task.dueDate);
+                        const timeRemaining = exprDate.getTime() - now.getTime();
+                        const hoursRemaining = timeRemaining / (1000 * 60 * 60);
+                        return hoursRemaining <= 24
+                    })
+                    setExpiringTasks(expiringTasks);
+                } catch (error) {
+                    alert(error.message);
+                }
+                return;
+            }
+            getTasks();
+        // }, 1000 * 60 * 30);
+    
+        // return () => clearInterval(interval);
+    }, []);
+    useEffect(() => {
+        expiringTasks.forEach((task) => {
+            console.log(1);
+            const createNoti = async () => {
+                try {
+                    await notificationApi.create({taskId: task._id,content: `thong bao ${task.title} sap het han`});
+                } catch (error) {
+                    alert(error.message);
+                }
+            }
+            createNoti();
+        });
+    }, [expiringTasks]);
 
     const updateEditorHeight = () => {
         setTimeout(() => {
@@ -134,7 +174,6 @@ const Task = props => {
                         <TextField
                             value={title}
                             onChange={updateTitle}
-                            placeholder='Untitled'
                             variant='outlined'
                             fullWidth
                             sx={{
@@ -148,6 +187,8 @@ const Task = props => {
                         <Box>
                             <BasicDatePicker
                                 taskId={task?._id}
+                                task={task}
+                                onUpdateTask={props.onUpdate}
                             />
                         </Box>
                         

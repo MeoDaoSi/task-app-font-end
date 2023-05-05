@@ -1,7 +1,7 @@
 import axiosClient from './axiosClient'
 
 const notificationApi = {
-    create: (taskId) => axiosClient.post('/notification'),
+    create: (params) => axiosClient.post('/notification',params),
     getAll: () => axiosClient.get('/notification')
 }
 
