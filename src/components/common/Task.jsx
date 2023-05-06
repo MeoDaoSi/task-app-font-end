@@ -48,7 +48,7 @@ const Task = props => {
         }
     }, [props.task])
     useEffect(  () => {
-        // const interval = setInterval(() => {
+        const interval = setInterval(() => {
             const getTasks = async () => {
                 try {
                     const res = await taskApi.getAll();
@@ -67,16 +67,19 @@ const Task = props => {
                 return;
             }
             getTasks();
-        // }, 1000 * 60 * 30);
+        }, 1000 * 60 * 60 * 24);
     
-        // return () => clearInterval(interval);
+        return () => clearInterval(interval);
     }, []);
     useEffect(() => {
         expiringTasks.forEach((task) => {
-            console.log(1);
+            const now = new Date();
             const createNoti = async () => {
+                const exprDate = new Date(task.dueDate);
+                const timeRemaining = exprDate.getTime() - now.getTime();
+                const hoursRemaining = timeRemaining / (1000 * 60 * 60);
                 try {
-                    await notificationApi.create({taskId: task._id,content: `thong bao ${task.title} sap het han`});
+                    await notificationApi.create({taskId: task._id,content: `${task.title} due in tomorrow`});
                 } catch (error) {
                     alert(error.message);
                 }

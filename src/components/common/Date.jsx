@@ -25,6 +25,7 @@ export default function BasicDatePicker(props) {
             <DatePicker
                 value={value}
                 onChange={handleDate}
+                minDate={dayjs((new Date()).getTime() + (1000 * 60 * 60 * 24))}
             />
         </DemoContainer>
         </LocalizationProvider>

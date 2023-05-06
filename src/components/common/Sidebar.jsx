@@ -112,10 +112,7 @@ const Sidebar = () => {
                                 <LogoutOutlinedIcon fontSize='small' />
                             </IconButton>
                         </Typography>
-                        <IconButton>
-                            {/* <NotificationsNoneIcon/> */}
-                        </IconButton>
-                            <LongMenu />
+                        <LongMenu />
                         
                     </Box>
                 </ListItem>

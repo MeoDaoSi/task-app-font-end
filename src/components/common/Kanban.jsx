@@ -75,11 +75,6 @@ const Kanban = props => {
             alert(err);
         }
     }
-    const [selectedDate, setSelectedDate] = useState(new Date());
-
-    const handleDateChange = (date) => {
-        // setSelectedDate(date);
-    };
 
     const updateSectionTitle = async (e, sectionId) => {
         clearTimeout(timer)
