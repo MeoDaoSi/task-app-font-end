@@ -79,7 +79,7 @@ const Task = props => {
                 const timeRemaining = exprDate.getTime() - now.getTime();
                 const hoursRemaining = timeRemaining / (1000 * 60 * 60);
                 try {
-                    await notificationApi.create({taskId: task._id,content: `${task.title} due in tomorrow`});
+                    await notificationApi.create({taskId: task._id,content: `${task.title} due tomorrow`});
                 } catch (error) {
                     alert(error.message);
                 }
