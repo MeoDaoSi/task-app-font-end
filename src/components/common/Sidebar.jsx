@@ -21,28 +21,11 @@ const Sidebar = () => {
     const { boardId } = useParams();
     const sidebarWidth = 250;
     const [activeIndex, setActiveIndex] = useState(0)
-
-    useEffect(() => {
-        const checkAuth = async () => {
-            const user = await authUtils.isAuthenticated();
-            console.log(user);
-        }
-        checkAuth();
-        const activeItem = boards.findIndex(e => e._id === boardId)
-        console.log(boards[0]);
-        if (boards.length > 0 && boardId === undefined ) {
-            console.log(`${boards[0]._id}`);
-            navigate(`boards/${boards[0]._id}`)
-        }
-        setActiveIndex(activeItem);
-    }, [boards, boardId, navigate])
     
     useEffect(() => {
         const getBoards = async () => {
             try {
                 const res = await boardApi.getAll();
-                console.log('hello');
-                console.log(res.data);
                 dispatch(setBoards(res.data));
             } catch (error) {
                 alert(error.message);
@@ -50,8 +33,13 @@ const Sidebar = () => {
         }
         getBoards();
     }, [dispatch])
-    
-    
+    useEffect(() => {
+        const activeItem = boards.findIndex(e => e._id === boardId)
+        if (boards.length > 0 && boardId === undefined ) {
+            navigate(`boards/${boards[0]._id}`)
+        }
+        setActiveIndex(activeItem);
+    }, [boards, boardId, navigate])
 
     const logout = async () => {
         try {
@@ -59,12 +47,12 @@ const Sidebar = () => {
         } catch (error) {
             alert(error.message);
         }
+        dispatch(setBoards([]));
         localStorage.removeItem('token');
         navigate('/login');
     }
 
     const onDragEnd = async ({source, destination}) => {
-        // console.log(boards);
         const newList = [...boards];
         const [removed] = newList.splice(source.index, 1);
         newList.splice(destination?.index,0,removed);
@@ -72,7 +60,6 @@ const Sidebar = () => {
         const activeItem = newList.findIndex(e => e._id === boardId)
         setActiveIndex(activeItem);
         dispatch(setBoards(newList));
-        console.log(newList);
         try {
             await boardApi.updatePosition({ boards: newList })
         } catch (error) {
@@ -82,7 +69,6 @@ const Sidebar = () => {
     const addBoard = async () => {
         try {
             const res = await boardApi.create();
-            console.log(res);
             const newList = [res.data, ...boards];
             dispatch(setBoards(newList));
             navigate(`/boards/${res.data._id}`)

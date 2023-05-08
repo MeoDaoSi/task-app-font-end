@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Navigator from '../assets/js/Navigator';
-import Content from '../assets/js/Content';
+import Users from '../components/common/Users';
 
 // function Copyright() {
 //     return (
@@ -197,7 +197,7 @@ export default function Admin() {
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                 {/* <Header onDrawerToggle={handleDrawerToggle} /> */}
             <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}>
-                <Content />
+                <Users />
             </Box>
                 {/* <Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
                     <Copyright />

@@ -83,6 +83,7 @@ const Task = props => {
                 } catch (error) {
                     alert(error.message);
                 }
+                return;
             }
             createNoti();
         });
@@ -95,6 +96,7 @@ const Task = props => {
                 box.querySelector('.ck-editor__editable_inline').style.height = (box.offsetHeight - 50) + 'px'
             }
         }, timeout)
+        return;
     }
     
     const onClose = () => {
@@ -110,6 +112,7 @@ const Task = props => {
         } catch (error) {
             alert(error);
         }
+        return;
     }
 
     const updateTitle = async (e) => {
