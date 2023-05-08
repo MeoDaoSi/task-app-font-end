@@ -11,6 +11,7 @@ import { setBoards } from '../../redux/features/boardSlice';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import FavoriteList from './FavoriteList';
 import LongMenu from '../common/Notification'
+import authUtils from '../../utils/authUtils';
 
 const Sidebar = () => {
     const user = useSelector((state) => state.user.value)
@@ -22,10 +23,26 @@ const Sidebar = () => {
     const [activeIndex, setActiveIndex] = useState(0)
 
     useEffect(() => {
+        const checkAuth = async () => {
+            const user = await authUtils.isAuthenticated();
+            console.log(user);
+        }
+        checkAuth();
+        const activeItem = boards.findIndex(e => e._id === boardId)
+        console.log(boards[0]);
+        if (boards.length > 0 && boardId === undefined ) {
+            console.log(`${boards[0]._id}`);
+            navigate(`boards/${boards[0]._id}`)
+        }
+        setActiveIndex(activeItem);
+    }, [boards, boardId, navigate])
+    
+    useEffect(() => {
         const getBoards = async () => {
             try {
                 const res = await boardApi.getAll();
-                console.log(res);
+                console.log('hello');
+                console.log(res.data);
                 dispatch(setBoards(res.data));
             } catch (error) {
                 alert(error.message);
@@ -34,13 +51,7 @@ const Sidebar = () => {
         getBoards();
     }, [dispatch])
     
-    useEffect(() => {
-        const activeItem = boards.findIndex(e => e._id === boardId)
-        if (boards.length > 0 && boardId === undefined ) {
-            navigate(`boards/${boards[0]._id}`)
-        }
-        setActiveIndex(activeItem);
-    }, [boards, boardId, navigate])
+    
 
     const logout = async () => {
         try {

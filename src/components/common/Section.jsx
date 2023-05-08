@@ -11,7 +11,7 @@ import AlarmIcon from '@mui/icons-material/Alarm';
 let timer
 const timeout = 500
 
-const Kanban = props => {
+const Section = props => {
     const boardId = props.boardId;
     const [data, setData] = useState([]);
     const [selectedTask, setSelectedTask] = useState(undefined);
@@ -254,4 +254,4 @@ const Kanban = props => {
     )
 }
 
-export default Kanban;
+export default Section;

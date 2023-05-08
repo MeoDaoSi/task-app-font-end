@@ -40,6 +40,7 @@ const Login = () => {
                 email,password
             })
             setLoading(false);
+            console.log(response.data);
             localStorage.setItem('token', response.data.token);
             navigate('/boards');  
         } catch (error) {

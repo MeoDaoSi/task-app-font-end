@@ -9,7 +9,7 @@ import { Box, IconButton, TextField } from '@mui/material'
 import { setBoards } from '../redux/features/boardSlice'
 import { setFavoriteList } from '../redux/features/favoriteSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import Kanban from '../components/common/Kanban';
+import Section from '../components/common/Section';
 
 let timer;
 const timeout = 500;
@@ -36,7 +36,7 @@ const Board = () => {
                 setSections(res.data.sections);
                 setIsFavorite(res.data.favorite);
             } catch (error) {
-                alert(error.message);
+                alert("error");
             }
         }
         getBoard();
@@ -172,7 +172,7 @@ const Board = () => {
                     />
                 </Box>
                 <Box>
-                    <Kanban data={sections} boardId={boardId}/>
+                    <Section data={sections} boardId={boardId}/>
                 </Box>
             </Box>
         </>

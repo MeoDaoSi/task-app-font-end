@@ -62,7 +62,7 @@ export default function LongMenu() {
             PaperProps={{
             style: {
                 maxHeight: ITEM_HEIGHT * 4.5,
-                width: '30ch',
+                width: '35ch',
             },
             }}
         >
@@ -84,11 +84,23 @@ export default function LongMenu() {
                 </IconButton>
             </Typography>
             {
+            options.length !== 0 ?
             options.map((option) => (
             <MenuItem key={option._id} selected={option === 'Pyxis'} onClick={handleClose} size="small">
-                {option.content}
+                <Typography>
+                    <small>{(new Date(option?.createdAt).toLocaleDateString())}</small>
+                    <br/>
+                    {option.content}
+                </Typography>
             </MenuItem>
-            ))}
+            )) : <Typography sx={{
+                my: 5, mx: 2,
+                display: 'flex',
+                justifyContent: 'center',
+            }}>
+                No Notification
+            </Typography>
+            }
         </Menu>
         </div>
     );

@@ -3,6 +3,7 @@ import authApi from "../apis/authApi";
 const authUtils = {
     isAuthenticated: async () => {
         const token = localStorage.getItem('token');
+        console.log(token);
         if (!token) {
             return false;
         }
